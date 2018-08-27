@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/chaoyi/Documents/audio/audioTest/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="c323c36ecc68965c4cfb460f7721113d2b61ed03">
+        <dex dex="/Users/chaoyi/Documents/audio/audioTest/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_d96c59d13ff29748ff2d9574674e42fc69e93142/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/chaoyi/Documents/audio/audioTest/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.2"
+        sha1="0cd648a07688db08e7513b36c4f0e2ba5f1b3671">
+        <dex dex="/Users/chaoyi/Documents/audio/audioTest/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_3ad134ddd32aea015cb449bd9d82ca846e23d5df/classes.dex" />
+    </item>
+
+</items>
