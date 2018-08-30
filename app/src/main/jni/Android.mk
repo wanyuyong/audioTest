@@ -38,9 +38,17 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 # Program
 include $(CLEAR_VARS)
-LOCAL_MODULE := ffmpegdemo
-LOCAL_SRC_FILES := ffmpegdemo.c
+LOCAL_MODULE := audiotrackplay
+LOCAL_SRC_FILES := audiotrackplay.c
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 LOCAL_LDLIBS := -llog -lz
+LOCAL_SHARED_LIBRARIES := avcodec avfilter avformat avutil libfdk-aac swresample swscale
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := openslplay
+LOCAL_SRC_FILES := openslplay.c
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
+LOCAL_LDLIBS := -llog -lz -lOpenSLES
 LOCAL_SHARED_LIBRARIES := avcodec avfilter avformat avutil libfdk-aac swresample swscale
 include $(BUILD_SHARED_LIBRARY)

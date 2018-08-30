@@ -11,6 +11,11 @@
         android:theme="@style/AppTheme"
         android:label="Audio">
 
+        <!-- umengKey -->
+        <meta-data
+            android:name="umengKey"
+            android:value="1105584968" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
