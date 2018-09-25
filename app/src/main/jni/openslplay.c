@@ -179,19 +179,25 @@ void getQueueCallBack( SLAndroidSimpleBufferQueueItf slBufferQueueItf, void* con
 /* 创建引擎 */
 void createEngine()
 {
-	slCreateEngine( &engineObject, 0, NULL, 0, NULL, NULL );                                                                                /* 创建引擎 */
-	(*engineObject)->Realize( engineObject, SL_BOOLEAN_FALSE );                                                                             /* 实现engineObject接口对象 */
-	(*engineObject)->GetInterface( engineObject, SL_IID_ENGINE, &engineEngine );                                                            /* 通过引擎调用接口初始化SLEngineItf */
+    /* 创建引擎对象接口 */
+	slCreateEngine( &engineObject, 0, NULL, 0, NULL, NULL );
+	/* 实现engineObject接口对象 */
+	(*engineObject)->Realize( engineObject, SL_BOOLEAN_FALSE );
+	/* 获取具体的引擎对象 */
+	(*engineObject)->GetInterface( engineObject, SL_IID_ENGINE, &engineEngine );
 }
 
 
 /* 创建混音器 */
 void createMixVolume()
 {
-	(*engineEngine)->CreateOutputMix( engineEngine, &outputMixObject, 0, 0, 0 );                                                            /* 用引擎对象创建混音器接口对象 */
-	(*outputMixObject)->Realize( outputMixObject, SL_BOOLEAN_FALSE );                                                                       /* 实现混音器接口对象 */
-	SLresult sLresult = (*outputMixObject)->GetInterface( outputMixObject, SL_IID_ENVIRONMENTALREVERB, &outputMixEnvironmentalReverb );     /* 利用混音器实例对象接口初始化具体的混音器对象 */
-	/* 设置 */
+    /* 用引擎对象创建混音器接口对象 */
+	(*engineEngine)->CreateOutputMix( engineEngine, &outputMixObject, 0, 0, 0 );
+	/* 实现混音器接口对象 */
+	(*outputMixObject)->Realize( outputMixObject, SL_BOOLEAN_FALSE );
+	/* 利用混音器实例对象接口初始化具体的混音器对象 */
+	SLresult sLresult = (*outputMixObject)->GetInterface( outputMixObject, SL_IID_ENVIRONMENTALREVERB, &outputMixEnvironmentalReverb );
+	/* 设置混音器环境属性设置 */
 	if ( SL_RESULT_SUCCESS == sLresult )
 	{
 		(*outputMixEnvironmentalReverb)->
@@ -208,12 +214,12 @@ void createPlayer(const char *input)
 	int	channels;
 	createFFmpeg( &rate, &channels, input);
 
-	LOGE( "rate is %d , channels is %d, file : %s", rate, channels, input );
+	LOGE( "CreatePlayer rate is %d, channels is %d, file : %s", rate, channels, input );
 
 	SLDataLocator_AndroidBufferQueue android_queue = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2 };
 
 	SLDataFormat_PCM pcm = { SL_DATAFORMAT_PCM, channels,
-	                         rate * 1000,
+	                         rate * 1000,  /* SL_SAMPLINGRATE_44_1 */
 	                         SL_PCMSAMPLEFORMAT_FIXED_16,
 	                         SL_PCMSAMPLEFORMAT_FIXED_16,
 	                         SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT,
@@ -225,12 +231,14 @@ void createPlayer(const char *input)
 
 	SLDataSink slDataSink = { &slDataLocator_outputMix, NULL };
 
-	const SLInterfaceID	ids[3]	= { SL_IID_BUFFERQUEUE, SL_IID_EFFECTSEND, SL_IID_VOLUME };
-	const SLboolean		req[3]	= { SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE, SL_BOOLEAN_FALSE };
+	const SLInterfaceID	ids[1]	= { SL_IID_BUFFERQUEUE };
+	const SLboolean		req[1]	= { SL_BOOLEAN_TRUE };
 
-	(*engineEngine)->CreateAudioPlayer( engineEngine, &audioplayer, &dataSource, &slDataSink, 3, ids, req );
+    /* 初始化播放器 */
+	(*engineEngine)->CreateAudioPlayer( engineEngine, &audioplayer, &dataSource, &slDataSink, 1, ids, req );
 	(*audioplayer)->Realize( audioplayer, SL_BOOLEAN_FALSE );
-	(*audioplayer)->GetInterface( audioplayer, SL_IID_PLAY, &slPlayItf ); /* 初始化播放器 */
+	(*audioplayer)->GetInterface( audioplayer, SL_IID_PLAY, &slPlayItf );
+
 	/* 注册缓冲区,通过缓冲区里面 的数据进行播放 */
 	(*audioplayer)->GetInterface( audioplayer, SL_IID_BUFFERQUEUE, &slBufferQueueItf );
 	/* 设置回调接口 */
